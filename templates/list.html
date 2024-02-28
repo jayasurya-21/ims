@@ -1,0 +1,16 @@
+{% extends 'blank_layout.html' %}
+{% block content %}
+
+<h1>List Movies</h1>
+
+{% for obj in movies %}
+
+<h1>Tittle : {{obj.tittle|lower}}</h1>
+
+<p>summary : {{obj.description|upper}}</p>
+<h4>year : {{obj.year}}</h4>
+
+{% endfor %}
+
+
+{% endblock content %}
