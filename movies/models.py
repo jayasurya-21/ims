@@ -25,8 +25,6 @@ class Customer(models.Model):
     cus_email = models.EmailField(blank=True)
     cus_mob = models.CharField(max_length=15)
     cus_gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    cus_gstno = models.CharField(max_length=15, blank=True)
-    cus_due = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.cus_name
@@ -77,16 +75,6 @@ class Login(models.Model):
       
 from django.db import models
 
-class Customer(models.Model):
-    cus_name = models.CharField(max_length=100)
-    cus_add = models.TextField()
-    cus_email = models.EmailField()
-    cus_mob = models.CharField(max_length=15)
-    cus_gender = models.CharField(max_length=10)
-    cus_gstno = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.cus_name
 
 class Product(models.Model):
     # Define your Product model fields

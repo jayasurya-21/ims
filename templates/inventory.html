@@ -1,0 +1,118 @@
+{% extends 'blank_layout.html' %}
+
+
+<body>
+{% block content %}
+<style>
+    /* Styles for the table */
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: left;
+}
+
+ */
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternate row background color */
+}
+
+/* General styles for the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1.title {
+    background-color: blue; /* Set h1 background color to blue */
+    color: white; /* Set text color for h1 */
+    padding: 10px;
+}
+
+ul.breadcrumbs {
+    list-style: none;
+    padding: 0;
+    background-color: #f0f0f0; /* Set breadcrumbs background color */
+    margin-top: 10px;
+}
+
+ul.breadcrumbs li {
+    display: inline-block;
+    padding: 5px;
+}
+
+ul.breadcrumbs li.divider {
+    margin: 0 5px;
+    color: #999;
+}
+
+ul.breadcrumbs li a {
+    text-decoration: none;
+    color: blue; /* Set link color for breadcrumbs */
+}
+
+ul.breadcrumbs li a.active {
+    color: black; /* Set active link color */
+    font-weight: bold;
+}
+
+</style>
+<div class="main">
+<section id="content">
+    <main>
+        <h1 class="title">INVENTORY</h1>
+        <ul class="breadcrumbs">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="divider">/</li>
+            <li><a href="#" class="active">INVENTORY</a></li>
+        </ul>
+        {% if products %}
+            <table border='3' class='table table-striped table-bordered'>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Unit</th>
+                    <th>Quantity</th>
+                    <th>HSN</th>
+                    <th>Description</th>
+                    <th>Expiration Date</th>
+                    <th>Min Quantity</th>
+                    <th>Tax</th>
+                </tr>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.product_id }}</td>
+                        <td>{{ product.product_name }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.brand }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.product_date }}</td>
+                        <td>{{ product.unit }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.hsn }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.exp_date }}</td>
+                        <td>{{ product.min_qty }}</td>
+                        <td>{{ product.tax }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No products found in the database.</p>
+        {% endif %}
+    </main>
+</section>
+{% endblock %}
+</div>
+</body>
+</html>

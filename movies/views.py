@@ -211,3 +211,15 @@ def new_sale(request):
     products = Product.objects.all()
     customers = Customer.objects.all()
     return render(request, 'new_sale.html', {'products': products, 'customers': customers})
+
+
+def inventory(request):
+    products = Product.objects.all()
+    return render(request, 'inventory.html', {'products': products})
+
+
+
+
+def customer_list(request):
+    customers = Customer.objects.all()
+    return render(request, 'customer_list.html', {'customers': customers})

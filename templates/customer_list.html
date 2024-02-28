@@ -1,0 +1,104 @@
+{% extends 'blank_layout.html' %}
+
+{% block content %}
+
+
+<style>
+    /* Styles for the table */
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: left;
+}
+
+ */
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternate row background color */
+}
+
+/* General styles for the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1.title {
+    background-color: blue; /* Set h1 background color to blue */
+    color: white; /* Set text color for h1 */
+    padding: 10px;
+}
+
+ul.breadcrumbs {
+    list-style: none;
+    padding: 0;
+    background-color: #f0f0f0; /* Set breadcrumbs background color */
+    margin-top: 10px;
+}
+
+ul.breadcrumbs li {
+    display: inline-block;
+    padding: 5px;
+}
+
+ul.breadcrumbs li.divider {
+    margin: 0 5px;
+    color: #999;
+}
+
+ul.breadcrumbs li a {
+    text-decoration: none;
+    color: blue; /* Set link color for breadcrumbs */
+}
+
+ul.breadcrumbs li a.active {
+    color: black; /* Set active link color */
+    font-weight: bold;
+}
+</style>
+<body>
+
+<div id="main">
+    <main>
+        <h1 class="title">CUSTOMERS</h1>
+        <ul class="breadcrumbs">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="divider">/</li>
+            <li><a href="#" class="active">LIST CUSTOMERS</a></li>
+        </ul>
+        {% if customers %}
+            <table border='3' class='table table-striped'>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Gender</th>
+                    <th>GST No</th>
+                </tr>
+                {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.cus_name }}</td>
+                        <td>{{ customer.cus_add }}</td>
+                        <td>{{ customer.cus_email }}</td>
+                        <td>{{ customer.cus_mob }}</td>
+                        <td>{{ customer.get_cus_gender_display }}</td>
+                        <td>{{ customer.cus_gstno }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No customers found in the database.</p>
+        {% endif %}
+    </main>
+{% endblock content %}
+
+</div> 
+</body>
+</html>

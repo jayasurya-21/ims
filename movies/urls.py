@@ -28,5 +28,9 @@ urlpatterns = [
     path('add_supplier/', views.add_supplier, name='add_supplier'),
     path('add_user/', views.add_user, name='add_user'),
     path('new_sale/', views.new_sale, name='new_sale'),
+    path('inventory/', views.inventory, name='inventory'),
+    path('customer_list/', views.customer_list, name='customer_list'),
+
+
   
 ]

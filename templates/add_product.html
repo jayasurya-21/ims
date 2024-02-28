@@ -1,17 +1,10 @@
+{% extends 'blank_layout.html' %}
 
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System</title>
-</head>
 
 <body>
+{% block content %}
+
+    <div class="main">
     <style>
     .card-body {
         padding: 20px;
@@ -227,4 +220,9 @@
                 
           </main>
     </section>    
-    </body>
+    {% endblock content %}
+
+  </div> 
+  </body>
+  </html>
+  
