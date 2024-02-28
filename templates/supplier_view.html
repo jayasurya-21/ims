@@ -1,6 +1,12 @@
+
+
 {% extends 'blank_layout.html' %}
 
 {% block content %}
+
+
+
+
 
 
 <style>
@@ -61,42 +67,45 @@ ul.breadcrumbs li a.active {
     color: black; /* Set active link color */
     font-weight: bold;
 }
-</style>
-<body>
 
+</style>
+
+
+
+<body>
 <div class="main">
+<section id="content">
     <main>
-        <h1 class="title">CUSTOMERS</h1>
+        <h1 class="title">SUPPLIERS</h1>
         <ul class="breadcrumbs">
-            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="/home">Home</a></li>
             <li class="divider">/</li>
-            <li><a href="#" class="active">LIST CUSTOMERS</a></li>
+            <li><a href="#" class="active">VIEW SUPPLIERS</a></li>
         </ul>
-        {% if customers %}
-            <table border='3' class='table table-striped'>
-                <tr>
-                    <th>Customer Name</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Gender</th>
-                    <th>GST No</th>
-                </tr>
-                {% for customer in customers %}
-                    <tr>
-                        <td>{{ customer.cus_name }}</td>
-                        <td>{{ customer.cus_add }}</td>
-                        <td>{{ customer.cus_email }}</td>
-                        <td>{{ customer.cus_mob }}</td>
-                        <td>{{ customer.get_cus_gender_display }}</td>
-                        <td>{{ customer.cus_gstno }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
+        {% if suppliers %}
+            <main>
+                <h2>SUPPLIER</h2>
+                <table border='3' class='table table-striped'>
+                    <th>Supplier name</th><th> Address</th><th> Email</th><th>Mobile</th><th>Category</th><th>GST no.</th><th>action</th><th></th>
+                    {% for supplier in suppliers %}
+                        <tr>
+                            <td>{{ supplier.sup_name }}</td>
+                            <td>{{ supplier.sup_add }}</td>
+                            <td>{{ supplier.sup_email }}</td>
+                            <td>{{ supplier.sup_mob }}</td>
+                            <td>{{ supplier.sup_category }}</td>
+                            <td>{{ supplier.sup_gstno }}</td>
+                            <!--td><a href="{% url 'edit_supplier' supplier.id %}">edit</a></td>
+                            <td><a href="{% url 'delete_supplier' supplier.id %}">Delete</a></td-->
+                        </tr>
+                    {% endfor %}
+                </table>
+            </main>
         {% else %}
-            <p>No customers found in the database.</p>
+            <p>No products found in the database.</p>
         {% endif %}
     </main>
+</section>
 {% endblock content %}
 
 </div> 

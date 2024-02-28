@@ -23,13 +23,20 @@ urlpatterns = [
     path('list/', views.list,name='list'),
     path('edit/', views.edit,name='edit'),
     path('home/', views.home,name='home'),
-    path('add_customer/', views.add_customer, name='add_customer'),
+    path('customer_add/', views.customer_add, name='customer_add'),
+    path('customer_view/', views.customer_view, name='customer_view'),
     path('add_product/', views.add_product, name='add_product'),
-    path('add_supplier/', views.add_supplier, name='add_supplier'),
     path('add_user/', views.add_user, name='add_user'),
     path('new_sale/', views.new_sale, name='new_sale'),
     path('inventory/', views.inventory, name='inventory'),
-    path('customer_list/', views.customer_list, name='customer_list'),
+    path('supplier_add/', views.supplier_add, name='supplier_add'),
+    path('supplier_del/', views.supplier_del, name='supplier_del'),
+    path('supplier_edit/', views.supplier_edit, name='supplier_edit'),
+    path('supplier_view/', views.supplier_view, name='supplier_view'),
+
+
+
+
 
 
   

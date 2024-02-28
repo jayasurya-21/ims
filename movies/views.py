@@ -32,15 +32,13 @@ def home(request):
     return render(request,'home.html')
 
 
-def add_customer(request):
+def customer_add(request):
     if request.method == 'POST':
         cus_name = request.POST.get('cus_name')
         cus_add = request.POST.get('cus_add')
         cus_email = request.POST.get('cus_email')
         cus_mob = request.POST.get('cus_mob')
         cus_gender = request.POST.get('cus_gender')
-        cus_gstno = request.POST.get('cus_gstno')
-        cus_due = request.POST.get('cus_due')
 
         # Create a new customer object
         new_customer = Customer(
@@ -55,9 +53,9 @@ def add_customer(request):
         # Save the new customer object
         new_customer.save()
         message = "Customer added successfully!"
-        return render(request, 'add_customer.html', {'message': message})
+        return render(request, 'customer_add.html', {'message': message})
 
-    return render(request, 'add_customer.html')
+    return render(request, 'customer_add.html')
 
 
 
@@ -111,7 +109,7 @@ def add_product(request):
 
 
 
-def add_supplier(request):
+def supplier_add(request):
     if request.method == 'POST':
         # Process form submission
         sup_name = request.POST.get('sup_name')
@@ -137,7 +135,7 @@ def add_supplier(request):
         return render(request, 'supplier_added.html')
 
     # If it's a GET request, just render the form
-    return render(request, 'add_supplier.html')
+    return render(request, 'supplier_add.html')
 
 def add_user(request):
     if request.method == 'POST':
@@ -220,6 +218,24 @@ def inventory(request):
 
 
 
-def customer_list(request):
+def customer_view(request):
     customers = Customer.objects.all()
-    return render(request, 'customer_list.html', {'customers': customers})
+    return render(request, 'customer_view.html', {'customers': customers})
+
+
+
+
+
+def supplier_view(request):
+    suppliers = Supplier.objects.all()
+    return render(request, 'supplier_view.html', {'supplier_view': suppliers})
+
+
+def supplier_del(request):
+    suppliers = Supplier.objects.all()
+    return render(request, 'supplier_del.html', {'supplier_del': suppliers})
+
+
+def supplier_edit(request):
+    suppliers = Supplier.objects.all()
+    return render(request, 'supplier_view.edit', {'supplier_edit': suppliers})
