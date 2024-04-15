@@ -1,4 +1,4 @@
-{% extends 'blank_layout.html' %}
+{% extends 'base_layout.html' %}
 
 {% block content %}
 
@@ -68,7 +68,7 @@ ul.breadcrumbs li a.active {
     <main>
         <h1 class="title">CUSTOMERS</h1>
         <ul class="breadcrumbs">
-            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'base' %}">Home  </a></li>
             <li class="divider">/</li>
             <li><a href="#" class="active">LIST CUSTOMERS</a></li>
         </ul>
@@ -81,6 +81,8 @@ ul.breadcrumbs li a.active {
                     <th>Mobile</th>
                     <th>Gender</th>
                     <th>GST No</th>
+                    <th>due</th>
+                    <th>Actions</th>
                 </tr>
                 {% for customer in customers %}
                     <tr>
@@ -90,6 +92,9 @@ ul.breadcrumbs li a.active {
                         <td>{{ customer.cus_mob }}</td>
                         <td>{{ customer.get_cus_gender_display }}</td>
                         <td>{{ customer.cus_gstno }}</td>
+                        <td>{{ customer.cus_due }}</td>
+                        <td><a href="{% url 'customer_edit' customer.id %}">edit</a>/<a href="{% url 'customer_del' customer.id %}">Delete</a></td>
+
                     </tr>
                 {% endfor %}
             </table>

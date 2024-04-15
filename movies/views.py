@@ -1,164 +1,49 @@
-from django.shortcuts import render
-from . models import MovieInfo
-#from . models import MovieForm
-from .models import Customer
-from .models import Product
-from .models import Supplier
-from .models import Login
-from .models import Product, Customer, Sale, SalesInvoice
+from django.shortcuts import render,HttpResponse,redirect, get_object_or_404
+from .models import Product, Customer, Sale, SalesInvoice,Supplier,Login
 from datetime import datetime
-
+from .forms import ProductForm , CustomerForm , SupplierForm
 # Create your views here.
-def create(request):
-    frm=MovieForm()
-    if request.POST:
-        tittle=request.POST.get('tittle')
-        year=request.POST.get('year')
-        description=request.POST.get('description')
-        movie_obj=MovieInfo(tittle=tittle,year=year,description=description)
-        movie_obj.save()
-        
-    return render(request,'create.html',{'frm':frm})
 
-def list(request):
-    movie_set=MovieInfo.objects.all       
-    print(movie_set) 
-    return render(request,'list.html',{'movies':movie_set})
-
-def edit(request):
-    return render(request,'edit.html')
-
-def home(request):
-    return render(request,'home.html')
+def base(request):
+    return render(request, 'base.html')
 
 
-def customer_add(request):
+def product_add(request):
+
     if request.method == 'POST':
-        cus_name = request.POST.get('cus_name')
-        cus_add = request.POST.get('cus_add')
-        cus_email = request.POST.get('cus_email')
-        cus_mob = request.POST.get('cus_mob')
-        cus_gender = request.POST.get('cus_gender')
-
-        # Create a new customer object
-        new_customer = Customer(
-            cus_name=cus_name,
-            cus_add=cus_add,
-            cus_email=cus_email,
-            cus_mob=cus_mob,
-            cus_gender=cus_gender,
-            cus_gstno=cus_gstno,
-            cus_due=cus_due
-        )
-        # Save the new customer object
-        new_customer.save()
-        message = "Customer added successfully!"
-        return render(request, 'customer_add.html', {'message': message})
-
-    return render(request, 'customer_add.html')
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm()
+    return render(request, 'product_add.html', {'form': form})
 
 
 
-def home(request):
-    return render(request, 'home.html')
-
-
-
-def add_product(request):
+def product_edit(request, pk):
+    instance_edit = get_object_or_404(Product,pk=pk)
     if request.method == 'POST':
-        # Process form submission
-        product_date = request.POST.get('product_date')
-        product_name = request.POST.get('product_name')
-        category = request.POST.get('category')
-        brand = request.POST.get('brand')
-        price = request.POST.get('price')
-        unit = request.POST.get('unit')
-        quantity = request.POST.get('quantity')
-        hsn = request.POST.get('hsn')
-        description = request.POST.get('description')
-        tax = request.POST.get('tax')
-        discount_type = request.POST.get('discount_type')
-        min_qty = request.POST.get('min_qty')
-        exp_date = request.POST.get('exp_date')
-        
-        # Create the Product object and save it
-        product = Product(
-            product_date=product_date,
-            product_name=product_name,
-            category=category,
-            brand=brand,
-            price=price,
-            unit=unit,
-            quantity=quantity,
-            hsn=hsn,
-            description=description,
-            tax=tax,
-            discount_type=discount_type,
-            min_qty=min_qty,
-            exp_date=exp_date
-        )
-        product.save()
-        
-        # Optionally, you can redirect the user to a success page
-        return render(request, 'product_added.html')
-
-    # If it's a GET request, just render the form
-    return render(request, 'add_product.html')
+        form = ProductForm(request.POST, instance=instance_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')  # Redirect to the product list page after successful edit
+    else:
+        form = ProductForm(instance=instance_edit)
+    return render(request, 'product_edit.html', {'form': form})
+    
 
 
+def product_del(request,pk):
+    instance=Product.objects.get(pk=pk)
+    instance.delete()
+    products= Product.objects.all()
+    return render(request,'product_list.html',{'products':products})
 
 
+    
 
-def supplier_add(request):
-    if request.method == 'POST':
-        # Process form submission
-        sup_name = request.POST.get('sup_name')
-        sup_add = request.POST.get('sup_add')
-        sup_category = request.POST.get('sup_category')
-        sup_gstno = request.POST.get('sup_gstno', '')
-        sup_email = request.POST.get('sup_email')
-        sup_cpn = request.POST.get('sup_cpn', '')
-        sup_mob = request.POST.get('sup_mob')
-
-        # Create the Supplier object and save it
-        supplier = Supplier.objects.create(
-            sup_name=sup_name,
-            sup_add=sup_add,
-            sup_category=sup_category,
-            sup_gstno=sup_gstno,
-            sup_email=sup_email,
-            sup_cpn=sup_cpn,
-            sup_mob=sup_mob
-        )
-
-        # Optionally, you can render a success template here
-        return render(request, 'supplier_added.html')
-
-    # If it's a GET request, just render the form
-    return render(request, 'supplier_add.html')
-
-def add_user(request):
-    if request.method == 'POST':
-        # Process form submission
-        username = request.POST.get('username')
-        name = request.POST.get('name')
-        password = request.POST.get('password')
-
-        # Create the Login object and save it
-        login = Login(username=username, name=name, password=password)
-        login.save()
-
-        # Optionally, you can render a success template here
-        return render(request, 'user_added.html')
-
-    # If it's a GET request, just render the form
-    return render(request, 'add_user.html')
-
-
-
-
-
-def new_sale(request):
+def sale_new(request):
     if request.method == 'POST':
         # Process form submission
         customer_id = request.POST.get('customerSelect')
@@ -208,13 +93,12 @@ def new_sale(request):
     # If it's a GET request, just render the form
     products = Product.objects.all()
     customers = Customer.objects.all()
-    return render(request, 'new_sale.html', {'products': products, 'customers': customers})
+    return render(request, 'sale_new.html', {'products': products, 'customers': customers})
 
 
-def inventory(request):
+def product_list(request):
     products = Product.objects.all()
-    return render(request, 'inventory.html', {'products': products})
-
+    return render(request, 'product_list.html', {'products': products})
 
 
 
@@ -222,20 +106,103 @@ def customer_view(request):
     customers = Customer.objects.all()
     return render(request, 'customer_view.html', {'customers': customers})
 
+def customer_add(request):
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('customer_view')
+    else:
+        form = CustomerForm()
+    return render(request, 'customer_add.html', {'form': form})
+
+
+
+def customer_edit(request, pk):
+    instance_edit = get_object_or_404(Customer,pk=pk)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, instance=instance_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('customer_view')  # Redirect to the customer list page after successful edit
+    else:
+        form = CustomerForm(instance=instance_edit)
+    return render(request, 'customer_edit.html', {'form': form})
+    
+
+
+def customer_del(request,pk):
+    instance=Customer.objects.get(pk=pk)
+    instance.delete()
+    customers= Customer.objects.all()
+    return render(request,'customer_view.html',{'customers':customers})
+
+
+    
 
 
 
 
 def supplier_view(request):
     suppliers = Supplier.objects.all()
-    return render(request, 'supplier_view.html', {'supplier_view': suppliers})
+    return render(request, 'supplier_view.html', {'suppliers': suppliers})
+
+def supplier_add(request):
+    if request.method == 'POST':
+        form = SupplierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_view')
+    else:
+        form = SupplierForm()
+    return render(request, 'supplier_add.html', {'form': form})
 
 
-def supplier_del(request):
-    suppliers = Supplier.objects.all()
-    return render(request, 'supplier_del.html', {'supplier_del': suppliers})
 
+def supplier_edit(request, pk):
+    instance_edit = get_object_or_404(Supplier, pk=pk)
+    if request.method == 'POST':
+        form = SupplierForm(request.POST, instance=instance_edit)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_view')  # Redirect to the supplier list page after successful edit
+    else:
+        form = SupplierForm(instance=instance_edit)
+    return render(request, 'supplier_edit.html', {'form': form})
+    
+    
+def supplier_del(request,pk):
+    instance=Supplier.objects.get(pk=pk)
+    instance.delete()
+    suppliers= Supplier.objects.all()
+    return render(request,'supplier_view.html',{'suppliers': suppliers})
+    
+       
+    
+  
 
-def supplier_edit(request):
-    suppliers = Supplier.objects.all()
-    return render(request, 'supplier_view.edit', {'supplier_edit': suppliers})
+def invoice_details(request):
+    # Check if salesInvoiceId exists in the session
+    if 'salesInvoiceId' in request.session:
+        # Retrieve salesInvoiceId from session
+        sales_invoice_id = request.session['salesInvoiceId']
+        
+        # Fetch sales invoice details
+        sales_invoice_details = SalesInvoice.objects.get(sales_invoice_id=sales_invoice_id)
+        
+        # Fetch customer details for the given sales invoice
+        customer_details = Customer.objects.filter(sales_invoice__sales_invoice_id=sales_invoice_id).first()
+        
+        # Fetch sale details for the given sales invoice
+        sale_details = Sale.objects.filter(sales_invoice_id=sales_invoice_id)
+        
+        # Render template with invoice details
+        return render(request, 'invoice_details.html', {
+            'sales_invoice_id': sales_invoice_id,
+            'sales_invoice_details': sales_invoice_details,
+            'customer_details': customer_details,
+            'sale_details': sale_details
+        })
+    else:
+        return HttpResponse("Sales Invoice ID not found in session.")

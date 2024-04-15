@@ -1,0 +1,112 @@
+{% extends 'base_layout.html' %}
+
+
+<body>
+{% block content %}
+
+    <div class="main">
+    <style>
+    .card-body {
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    /* Style the buttons */
+    .btn {
+        margin-right: 10px;
+    }
+    
+    /* Style form labels */
+    label {
+        font-weight: bold;
+    }
+    
+    /* Adjust the card appearance */
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Style form inputs and selects */
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+    
+    /* Ensure the buttons are aligned */
+    .btn-group {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    h1.title {
+        background-color: blue; /* Set h1 background color to blue */
+        color: white; /* Set text color for h1 */
+        padding: 10px;
+    }
+    
+    ul.breadcrumbs {
+        list-style: none;
+        padding: 0;
+        background-color: #f0f0f0; /* Set breadcrumbs background color */
+        margin-top: 10px;
+    }
+    
+    ul.breadcrumbs li {
+        display: inline-block;
+        padding: 5px;
+    }
+    
+    ul.breadcrumbs li.divider {
+        margin: 0 5px;
+        color: #999;
+    }
+    
+    ul.breadcrumbs li a {
+        text-decoration: none;
+        color: blue; /* Set link color for breadcrumbs */
+    }
+    
+    ul.breadcrumbs li a.active {
+        color: black; /* Set active link color */
+        font-weight: bold;
+    }
+        
+    </style>
+    <section id="content">
+       <main>
+                <h1 class="title" style="margin: left 10px;">ADD NEW PRODUCT</h1>
+                <ul class="breadcrumbs" style="margin: Right 50px;">
+                    <li><a href="{% url 'base' %}">Home  </a></li>
+                    <li class="divider">/</li>
+                    <li><a href="a{% url 'product_add'%}" class="active">ADD PRODUCT</a></li>
+                </ul>
+                <form method="POST"  action="{% url 'product_add' %} ">
+                  {% csrf_token %}
+                  {{ form }}
+                  <button type="submit">Add Product</button>
+                </form>
+           
+
+    
+    
+                
+          </main>
+    </section>    
+    {% endblock content %}
+
+  </div> 
+  </body>
+  </html>
+  

@@ -15,24 +15,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path,include
 from . import views
 
 urlpatterns = [
-    path('create/', views.create,name='create'),
-    path('list/', views.list,name='list'),
-    path('edit/', views.edit,name='edit'),
-    path('home/', views.home,name='home'),
+
+    path('', views.base,name='base'),
+    
+    path('sale_new/', views.sale_new, name='sale_new'),
+    
+    path('product_add/', views.product_add, name='product_add'),
+    path('product_list/', views.product_list, name='product_list'),
+    path('product_edit/<pk>', views.product_edit, name='product_edit'),
+    path('product_del/<pk>', views.product_del, name='product_del'),
+    
+    path('supplier_add/', views.supplier_add, name='supplier_add'),
+    path('supplier_view', views.supplier_view, name='supplier_view'),
+    path('supplier_del/<pk>', views.supplier_del, name='supplier_del'),
+    path('supplier_edit/<pk>', views.supplier_edit, name='supplier_edit'),
+
     path('customer_add/', views.customer_add, name='customer_add'),
     path('customer_view/', views.customer_view, name='customer_view'),
-    path('add_product/', views.add_product, name='add_product'),
-    path('add_user/', views.add_user, name='add_user'),
-    path('new_sale/', views.new_sale, name='new_sale'),
-    path('inventory/', views.inventory, name='inventory'),
-    path('supplier_add/', views.supplier_add, name='supplier_add'),
-    path('supplier_del/', views.supplier_del, name='supplier_del'),
-    path('supplier_edit/', views.supplier_edit, name='supplier_edit'),
-    path('supplier_view/', views.supplier_view, name='supplier_view'),
+    path('customer_del/<pk>', views.customer_del, name='customer_del'),
+    path('customer_edit/<pk>', views.customer_edit, name='customer_edit'),
 
 
 

@@ -1,4 +1,4 @@
-{% extends 'blank_layout.html' %}
+{% extends 'base_layout.html' %}
 
 
 <body>
@@ -148,7 +148,7 @@
        <main>
                 <h1 class="title">NEW SALE</h1>
                 <ul class="breadcrumbs">
-                    <li><a href="home.php">Home</a></li>
+                    <li><a href="{% url 'base' %}">Home  </a></li>
                     <li class="divider">/</li>
                     <li><a href="#" class="active">SALES</a></li>
                 </ul>

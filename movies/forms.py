@@ -1,8 +1,23 @@
+from django import forms
 from django.forms import ModelForm
-from models import MovieInfo
-
-class MovieInfo(ModelForm):
+from .models import Product,Customer,Supplier
+  
+      
+class ProductForm(forms.ModelForm):
+    
     class Meta:
-        model=MovieInfo
-        fields='__all__'
+        model = Product
+        fields ='__all__'
+        
+ 
+         
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields ='__all__'            
+        
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields ='__all__'
         

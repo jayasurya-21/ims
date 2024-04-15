@@ -1,4 +1,4 @@
-{% extends 'blank_layout.html' %}
+{% extends 'base_layout.html' %}
 
 
 <body>
@@ -68,9 +68,9 @@ ul.breadcrumbs li a.active {
     <main>
         <h1 class="title">INVENTORY</h1>
         <ul class="breadcrumbs">
-            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'base' %}">Home  </a></li>
             <li class="divider">/</li>
-            <li><a href="#" class="active">INVENTORY</a></li>
+            <li><a href="{% url 'product_list' %}" class="active">INVENTORY</a></li>
         </ul>
         {% if products %}
             <table border='3' class='table table-striped table-bordered'>
@@ -88,6 +88,7 @@ ul.breadcrumbs li a.active {
                     <th>Expiration Date</th>
                     <th>Min Quantity</th>
                     <th>Tax</th>
+                    <th>Actions</th>
                 </tr>
                 {% for product in products %}
                     <tr>
@@ -104,6 +105,8 @@ ul.breadcrumbs li a.active {
                         <td>{{ product.exp_date }}</td>
                         <td>{{ product.min_qty }}</td>
                         <td>{{ product.tax }}</td>
+                        <td><a href="{% url 'product_edit' product.id %}">edit</a>/<a href="{% url 'product_del' product.id %}">Delete</a></td>
+
                     </tr>
                 {% endfor %}
             </table>

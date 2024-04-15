@@ -1,7 +1,6 @@
 
 
-{% extends 'blank_layout.html' %}
-
+{% extends 'base_layout.html' %}
 {% block content %}
 
 
@@ -10,6 +9,8 @@
 
 
 <style>
+
+    
     /* Styles for the table */
     table {
     width: 100%;
@@ -78,7 +79,7 @@ ul.breadcrumbs li a.active {
     <main>
         <h1 class="title">SUPPLIERS</h1>
         <ul class="breadcrumbs">
-            <li><a href="/home">Home</a></li>
+            <li><a href="{% url 'base' %}">Home  </a></li>
             <li class="divider">/</li>
             <li><a href="#" class="active">VIEW SUPPLIERS</a></li>
         </ul>
@@ -95,8 +96,8 @@ ul.breadcrumbs li a.active {
                             <td>{{ supplier.sup_mob }}</td>
                             <td>{{ supplier.sup_category }}</td>
                             <td>{{ supplier.sup_gstno }}</td>
-                            <!--td><a href="{% url 'edit_supplier' supplier.id %}">edit</a></td>
-                            <td><a href="{% url 'delete_supplier' supplier.id %}">Delete</a></td-->
+                            <td><a href="{% url 'supplier_edit' supplier.id %}">edit</a>/<a href="{% url 'supplier_del' supplier.id %}">Delete</a></td>
+
                         </tr>
                     {% endfor %}
                 </table>

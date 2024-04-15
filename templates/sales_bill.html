@@ -1,0 +1,115 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+
+<style>
+    /* Styles for the table */
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: left;
+}
+
+ */
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternate row background color */
+}
+
+/* General styles for the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1.title {
+    background-color: blue; /* Set h1 background color to blue */
+    color: white; /* Set text color for h1 */
+    padding: 10px;
+}
+
+ul.breadcrumbs {
+    list-style: none;
+    padding: 0;
+    background-color: #f0f0f0; /* Set breadcrumbs background color */
+    margin-top: 10px;
+}
+
+ul.breadcrumbs li {
+    display: inline-block;
+    padding: 5px;
+}
+
+ul.breadcrumbs li.divider {
+    margin: 0 5px;
+    color: #999;
+}
+
+ul.breadcrumbs li a {
+    text-decoration: none;
+    color: blue; /* Set link color for breadcrumbs */
+}
+
+ul.breadcrumbs li a.active {
+    color: black; /* Set active link color */
+    font-weight: bold;
+}
+</style>
+<body>
+
+    <div class="main">
+        <main>
+            <h1 class="title">CUSTOMERS</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'base' %}">Home  </a></li>
+                <li class="divider">/</li>
+                <li><a href="#" class="active">LIST CUSTOMERS</a></li>
+            </ul>
+    <h1>Invoice for Sale ID: {{ sales_invoice_id }}</h1>
+
+    {% if customer_details %}
+    <h2>Customer Details</h2>
+    <p>Name: {{ customer_details.cus_name }}</p>
+    <p>Address: {{ customer_details.cus_add }}</p>
+    <p>Email: {{ customer_details.cus_email }}</p>
+    <p>Phone: {{ customer_details.cus_mob }}</p>
+    <p>Gender: {{ customer_details.cus_gender }}</p>
+    <p>GST Number: {{ customer_details.cus_gstno }}</p>
+    {% endif %}
+
+    {% if sales_invoice_details %}
+    <h2>Sales Invoice Details</h2>
+    <p>Sales Date: {{ sales_invoice_details.sales_date }}</p>
+    <p>Total Amount: {{ sales_invoice_details.total_amount }}</p>
+    <p>Discount: {{ sales_invoice_details.discount }}</p>
+    {% endif %}
+
+    {% if sale_details %}
+    <h2>Sale Details</h2>
+    <table border="1">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+        </tr>
+        {% for sale in sale_details %}
+        <tr>
+            <td>{{ sale.product.product_name }}</td>
+            <td>{{ sale.quantity }}</td>
+            <td>{{ sale.product.price }}</td>
+            <td>{{ sale.quantity * sale.product.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</main>
+</div>
+</body>
+</html>

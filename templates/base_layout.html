@@ -52,15 +52,23 @@
 
   <div class="sidebar">
     <ul>
-        <li><a href="/home">Home  </a></li>
-        <li><a href="/add_customer">Add customer  </a></li>
-        <li><a href="/customer_list">Customer_list  </a></li>
-        <li><a href="/inventory">Inventory  </a></li>
-        <li><a href="/add_product">Add Product  </a></li>
-        <li><a href="/supplier_add">Add Supplier </a></li>
-        <li><a href="/supplier_view">View Supplier </a></li>
-        <li><a href="/add_user">Add user  </a></li>
-        <li><a href="/new_sale">New Sale  </a></li>
+        <li><a href="{% url 'base' %}">Home  </a></li>
+        <li><a href="{% url 'customer_add' %}">Add customer  </a></li>
+        <li><a href="{% url 'customer_view' %}">Customer_list  </a></li>
+
+        
+
+        <li><a href="{% url 'product_list' %}">Inventory  </a></li>
+        <li><a href="{% url 'product_add' %}">Add Product  </a></li>
+
+
+
+        <li><a href="{% url 'supplier_add' %}">Add Supplier </a></li>
+        <li><a href="{% url 'supplier_view' %}">View Supplier </a></li>
+
+
+
+        <li><a href="/sale_new">New Sale  </a></li>
 
 
 
