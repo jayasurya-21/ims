@@ -1,15 +1,49 @@
-from django.shortcuts import render,HttpResponse,redirect, get_object_or_404
-from .models import Product, Customer, Sale, SalesInvoice,Supplier,Login
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from .models import Product, Customer, Sale , Supplier, Login,SaleProduct
+from .forms import ProductForm, CustomerForm, SupplierForm
+from django.forms import formset_factory
+from django.shortcuts import render
+from .models import Supplier, Product
+from django.http import HttpResponseBadRequest
+from django.utils import timezone
+import string
+import random
 from datetime import datetime
-from .forms import ProductForm , CustomerForm , SupplierForm
+from django.utils import timezone
+from django.contrib.auth import authenticate, login, logout
+
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('base')
+        else:
+            context = {'error': 'Invalid username or password'}
+            return render(request, 'login.html', context)
+    return render(request, 'login.html')
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+
+@login_required
 def base(request):
-    return render(request, 'base.html')
+    products = Product.objects.all()
+    count = products.count()
+    customers = Customer.objects.all()
+    ccount = customers.count()
+    return render(request, 'base.html', {'count': count, 'ccount': ccount})
 
-
+@login_required
 def product_add(request):
-
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -19,10 +53,9 @@ def product_add(request):
         form = ProductForm()
     return render(request, 'product_add.html', {'form': form})
 
-
-
+@login_required
 def product_edit(request, pk):
-    instance_edit = get_object_or_404(Product,pk=pk)
+    instance_edit = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
         form = ProductForm(request.POST, instance=instance_edit)
         if form.is_valid():
@@ -31,83 +64,33 @@ def product_edit(request, pk):
     else:
         form = ProductForm(instance=instance_edit)
     return render(request, 'product_edit.html', {'form': form})
-    
 
 
-def product_del(request,pk):
-    instance=Product.objects.get(pk=pk)
+@login_required
+def product_del(request, pk):
+    instance = Product.objects.get(pk=pk)
     instance.delete()
-    products= Product.objects.all()
-    return render(request,'product_list.html',{'products':products})
-
-
-    
-
-def sale_new(request):
-    if request.method == 'POST':
-        # Process form submission
-        customer_id = request.POST.get('customerSelect')
-        if customer_id:
-            customer = Customer.objects.get(id=customer_id)
-        else:
-            # Process customer data
-            cus_name = request.POST.get('cus_name')
-            cus_add = request.POST.get('cus_add')
-            cus_email = request.POST.get('cus_email')
-            cus_mob = request.POST.get('cus_mob')
-            cus_gender = request.POST.get('cus_gender')
-            cus_gstno = request.POST.get('cus_gstno')
-
-            # Create a new customer
-            customer = Customer.objects.create(
-                cus_name=cus_name,
-                cus_add=cus_add,
-                cus_email=cus_email,
-                cus_mob=cus_mob,
-                cus_gender=cus_gender,
-                cus_gstno=cus_gstno
-            )
-
-        # Create a new sales invoice
-        sales_invoice = SalesInvoice.objects.create(
-            sales_date=datetime.now(),
-            total_amount=request.POST.get('grand_total'),
-            discount=request.POST.get('discount'),
-            customer=customer
-        )
-
-        # Process sales product data
-        for i in range(len(request.POST.getlist('product[]'))):
-            product_id = request.POST.getlist('product[]')[i]
-            quantity = request.POST.getlist('quantity[]')[i]
-            price = request.POST.getlist('sales_price[]')[i]
-            sale = Sale.objects.create(
-                sales_invoice=sales_invoice,
-                product=Product.objects.get(id=product_id),
-                quantity=quantity,
-                price=price
-            )
-
-        return render(request, 'sales_bill_temp.html', {'sales_invoice': sales_invoice})
-
-    # If it's a GET request, just render the form
-    products = Product.objects.all()
-    customers = Customer.objects.all()
-    return render(request, 'sale_new.html', {'products': products, 'customers': customers})
-
-
-def product_list(request):
     products = Product.objects.all()
     return render(request, 'product_list.html', {'products': products})
 
+@login_required
+def sale_added(request):
+    return render(request, 'sale_added.html')
 
+
+@login_required
+def product_list(request):
+    search = request.GET.get('search', '')
+    products = Product.objects.filter(product_name__icontains=search)
+    return render(request, 'product_list.html', {'products': products})
 
 def customer_view(request):
-    customers = Customer.objects.all()
+    search = request.GET.get('search', '')
+    customers = Customer.objects.filter(cus_name__icontains=search)
     return render(request, 'customer_view.html', {'customers': customers})
 
-def customer_add(request):
 
+def customer_add(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
@@ -118,9 +101,8 @@ def customer_add(request):
     return render(request, 'customer_add.html', {'form': form})
 
 
-
 def customer_edit(request, pk):
-    instance_edit = get_object_or_404(Customer,pk=pk)
+    instance_edit = get_object_or_404(Customer, pk=pk)
     if request.method == 'POST':
         form = CustomerForm(request.POST, instance=instance_edit)
         if form.is_valid():
@@ -129,24 +111,20 @@ def customer_edit(request, pk):
     else:
         form = CustomerForm(instance=instance_edit)
     return render(request, 'customer_edit.html', {'form': form})
-    
 
 
-def customer_del(request,pk):
-    instance=Customer.objects.get(pk=pk)
+def customer_del(request, pk):
+    instance = Customer.objects.get(pk=pk)
     instance.delete()
-    customers= Customer.objects.all()
-    return render(request,'customer_view.html',{'customers':customers})
-
-
-    
-
-
+    customers = Customer.objects.all()
+    return render(request, 'customer_view.html', {'customers': customers})
 
 
 def supplier_view(request):
-    suppliers = Supplier.objects.all()
+    search = request.GET.get('search', '')
+    suppliers = Supplier.objects.filter(sup_name__icontains=search)
     return render(request, 'supplier_view.html', {'suppliers': suppliers})
+
 
 def supplier_add(request):
     if request.method == 'POST':
@@ -159,7 +137,6 @@ def supplier_add(request):
     return render(request, 'supplier_add.html', {'form': form})
 
 
-
 def supplier_edit(request, pk):
     instance_edit = get_object_or_404(Supplier, pk=pk)
     if request.method == 'POST':
@@ -170,39 +147,102 @@ def supplier_edit(request, pk):
     else:
         form = SupplierForm(instance=instance_edit)
     return render(request, 'supplier_edit.html', {'form': form})
-    
-    
-def supplier_del(request,pk):
-    instance=Supplier.objects.get(pk=pk)
+def supplier_del(request, pk):
+    instance = Supplier.objects.get(pk=pk)
     instance.delete()
-    suppliers= Supplier.objects.all()
-    return render(request,'supplier_view.html',{'suppliers': suppliers})
-    
-       
-    
-  
+    suppliers = Supplier.objects.all()
+    return render(request, 'supplier_view.html', {'suppliers': suppliers})
 
-def invoice_details(request):
-    # Check if salesInvoiceId exists in the session
-    if 'salesInvoiceId' in request.session:
-        # Retrieve salesInvoiceId from session
-        sales_invoice_id = request.session['salesInvoiceId']
-        
-        # Fetch sales invoice details
-        sales_invoice_details = SalesInvoice.objects.get(sales_invoice_id=sales_invoice_id)
-        
-        # Fetch customer details for the given sales invoice
-        customer_details = Customer.objects.filter(sales_invoice__sales_invoice_id=sales_invoice_id).first()
-        
-        # Fetch sale details for the given sales invoice
-        sale_details = Sale.objects.filter(sales_invoice_id=sales_invoice_id)
-        
-        # Render template with invoice details
-        return render(request, 'invoice_details.html', {
-            'sales_invoice_id': sales_invoice_id,
-            'sales_invoice_details': sales_invoice_details,
-            'customer_details': customer_details,
-            'sale_details': sale_details
-        })
+
+from django.db import transaction
+
+def new_sale(request):
+    if request.method == 'POST':
+        if 'save_sale' in request.POST:
+            # Handle the save sale logic
+            customer_id = request.POST.get('customer')
+            customer = Customer.objects.get(id=customer_id)
+
+            sale = Sale.objects.create(
+                customer=customer,
+                sale_date=timezone.now().date(),  # Set the sale_date to the current date
+                invoice_number=generate_unique_invoice_number()
+            )
+
+            total_amount = 0
+            for i in range(1, int(request.POST.get('row_count', 1)) + 1):
+                product_id = request.POST.get(f'product_{i}')
+                sale_quantity = int(request.POST.get(f'sale_quantity_{i}'))
+                sale_price = float(request.POST.get(f'sale_price_{i}'))
+                selected = request.POST.get(f'selected_{i}', 'off')
+
+                if selected == 'on':
+                    product = Product.objects.get(id=product_id)
+                    if product.quantity >= sale_quantity:
+                        product.quantity -= sale_quantity
+                        product.save()
+
+                        SaleProduct.objects.create(
+                            sale=sale,
+                            product=product,
+                            quantity=sale_quantity,
+                            sale_price=sale_price
+                        )
+                        total_amount += sale_quantity * sale_price
+                    else:
+                        # Handle the case when the product quantity is not sufficient
+                        return render(request, 'sale_new.html', {'error': 'Not enough product in stock', 'customers': Customer.objects.all(), 'products': Product.objects.all()})
+
+            sale.total_amount = total_amount
+            sale.save()
+            return redirect('sale_detail', sale_id=sale.id)
+        elif 'generate_invoice' in request.POST:
+            # Handle the generate invoice logic
+            return redirect('invoice_page', sale_id=sale.id)
     else:
-        return HttpResponse("Sales Invoice ID not found in session.")
+        customers = Customer.objects.all()
+        products = Product.objects.all()
+        initial_product = products.first()
+        return render(request, 'sale_new.html', {'customers': customers, 'products': products, 'initial_product': initial_product})    
+    
+def generate_unique_invoice_number():
+    # Generate a random string of 5 characters
+    random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    
+    # Get the current date and time
+    current_datetime = datetime.now().strftime('%Y%m%d%H%M%S')
+    
+    # Combine the random string and the current date/time to create the unique invoice number
+    invoice_number = f"INV{current_datetime}{random_string}"
+    
+    return invoice_number
+
+
+from .models import Product  # Import the Product model
+
+from .models import Sale, SaleProduct  # Import the Sale and SaleProduct models
+
+def sale_detail(request, sale_id):
+    sale = get_object_or_404(Sale, id=sale_id)
+    sale_products = SaleProduct.objects.filter(sale=sale)
+    total_amount = sale.total_amount
+    return render(request, 'sale_detail.html', {
+        'sale': sale,
+        'sale_products': sale_products,
+        'customer': sale.customer,
+        'total_amount': total_amount
+    })
+    
+def invoice_page(request, sale_id):
+    sale = get_object_or_404(Sale, id=sale_id)
+    sale_products = SaleProduct.objects.filter(sale=sale)
+    total_amount = sale.total_amount
+    return render(request, 'sale_detail.html', {
+        'sale': sale,
+        'sale_products': sale_products,
+        'total_amount': total_amount
+    })
+    
+def sale_list(request):
+    sales = Sale.objects.all().order_by('-sale_date')
+    return render(request, 'sale_list.html', {'sales': sales})

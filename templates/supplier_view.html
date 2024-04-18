@@ -68,7 +68,12 @@ ul.breadcrumbs li a.active {
     color: black; /* Set active link color */
     font-weight: bold;
 }
+p {
+        font-size:  20px;
+        color:  red;
+        padding:  19px;
 
+    }
 </style>
 
 
@@ -86,6 +91,10 @@ ul.breadcrumbs li a.active {
         {% if suppliers %}
             <main>
                 <h2>SUPPLIER</h2>
+                <form method="get">
+                    <input type="text" name="search" placeholder="Search products" value="{{ request.GET.search|default:'' }}">
+                    <input type="submit" value="Search">
+                </form>
                 <table border='3' class='table table-striped'>
                     <th>Supplier name</th><th> Address</th><th> Email</th><th>Mobile</th><th>Category</th><th>GST no.</th><th>action</th><th></th>
                     {% for supplier in suppliers %}
@@ -96,14 +105,14 @@ ul.breadcrumbs li a.active {
                             <td>{{ supplier.sup_mob }}</td>
                             <td>{{ supplier.sup_category }}</td>
                             <td>{{ supplier.sup_gstno }}</td>
-                            <td><a href="{% url 'supplier_edit' supplier.id %}">edit</a>/<a href="{% url 'supplier_del' supplier.id %}">Delete</a></td>
+                            <td><a href="{% url 'supplier_edit' supplier.id %}"class="btn btn-primary">edit</a>  <a href="{% url 'supplier_del' supplier.id %}"class="btn btn-danger">Delete</a></td>
 
                         </tr>
                     {% endfor %}
                 </table>
             </main>
         {% else %}
-            <p>No products found in the database.</p>
+            <p>No Supplier found in the database.</p>
         {% endif %}
     </main>
 </section>

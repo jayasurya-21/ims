@@ -53,28 +53,8 @@
 </head>
 <body>
     <div class="invoice-box">
-        <?php
-        // Start the session to access session variables
-        session_start();
-
-        // Assuming you have the sales invoice number stored in the session
-        if (isset($_SESSION['salesInvoiceId'])) {
-            $salesInvoiceId = $_SESSION['salesInvoiceId'];
-
-            // Database connection details
-            $host = "localhost";
-            $username = "root";
-            $password = "";
-            $database = "ims";
-
-            // Create a connection to the database
-            $conn = new mysqli($host, $username, $password, $database);
-
-            // Check the connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
+   
+    
             // Fetch invoice details
             $sqlInvoice = "SELECT si.sales_invoice_id, si.sales_date, si.total_amount, si.discount,
                         c.cus_name, c.cus_add, c.cus_email, c.cus_mob

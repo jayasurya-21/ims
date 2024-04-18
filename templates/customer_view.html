@@ -61,6 +61,12 @@ ul.breadcrumbs li a.active {
     color: black; /* Set active link color */
     font-weight: bold;
 }
+p {
+    font-size:  20px;
+    color:  red;
+    padding:  19px;
+
+}
 </style>
 <body>
 
@@ -72,6 +78,10 @@ ul.breadcrumbs li a.active {
             <li class="divider">/</li>
             <li><a href="#" class="active">LIST CUSTOMERS</a></li>
         </ul>
+        <form method="get">
+            <input type="text" name="search" placeholder="Search products" value="{{ request.GET.search|default:'' }}">
+            <input type="submit" value="Search">
+        </form>
         {% if customers %}
             <table border='3' class='table table-striped'>
                 <tr>
@@ -93,7 +103,8 @@ ul.breadcrumbs li a.active {
                         <td>{{ customer.get_cus_gender_display }}</td>
                         <td>{{ customer.cus_gstno }}</td>
                         <td>{{ customer.cus_due }}</td>
-                        <td><a href="{% url 'customer_edit' customer.id %}">edit</a>/<a href="{% url 'customer_del' customer.id %}">Delete</a></td>
+                        <td><a href="{% url 'customer_edit' customer.id %}"class="btn btn-primary">Edit</a>
+                        <a href="{% url 'customer_del' customer.id %}"class="btn btn-danger">Delete</a></td>
 
                     </tr>
                 {% endfor %}

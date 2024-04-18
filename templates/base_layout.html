@@ -8,9 +8,12 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Add Customer</title>
+        {% load static %}
+        {% load crispy_forms_tags %}
 		{% load bootstrap5 %}
 		{% bootstrap_css %}
 		{% bootstrap_javascript %}
+        
 
         <style type="text/css">
             .sidebar{
@@ -27,9 +30,9 @@
             }
 
             .sidebar a {
-                padding: 6px 8px 6px 16px;
+                padding: 3px 4px 3px 8px;
                 text-decoration: none;
-                font-size: 25px;
+                font-size: 20px;
                 color: #818181;
                 display: block;
 
@@ -45,6 +48,15 @@
                 padding: 0px 10px;
             }
 
+            li{
+                list-style-type: none;
+            }
+            hr{
+                border: 1px solid #818181;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+
         </style>
 
 	</head>
@@ -52,24 +64,28 @@
 
   <div class="sidebar">
     <ul>
-        <li><a href="{% url 'base' %}">Home  </a></li>
-        <li><a href="{% url 'customer_add' %}">Add customer  </a></li>
-        <li><a href="{% url 'customer_view' %}">Customer_list  </a></li>
-
-        
-
-        <li><a href="{% url 'product_list' %}">Inventory  </a></li>
-        <li><a href="{% url 'product_add' %}">Add Product  </a></li>
-
-
-
-        <li><a href="{% url 'supplier_add' %}">Add Supplier </a></li>
-        <li><a href="{% url 'supplier_view' %}">View Supplier </a></li>
-
-
-
-        <li><a href="/sale_new">New Sale  </a></li>
-
+        <li><a href="{% url 'base' %}">Home</a></li>
+        <hr>  <hr>
+        <li><a href="{% url 'customer_add' %}">Add customer</a></li>
+        <hr>
+        <li><a href="{% url 'customer_view' %}">Customers</a></li>
+        <hr>  <hr>
+        <li><a href="{% url 'product_add' %}">Add Product</a></li>
+        <hr>
+        <li><a href="{% url 'product_list' %}">Inventory</a></li>
+        <hr><hr>
+        <li><a href="{% url 'supplier_add' %}">Add Supplier</a></li>
+        <hr>
+        <li><a href="{% url 'supplier_view' %}">Suppliers</a></li>
+        <hr>  <hr>
+        <li><a href="/sale_new">New Sale</a></li>
+        <hr>
+        <li><a href="{% url 'sale_list' %}">Sales</a></li>
+        <hr>  <hr>
+        <li><a href="/purchase_new">New purchase</a></li>
+        <hr>
+        <li><a href="/purchase_new">Purchase</a></li>
+        <hr>
 
 
     </ul>

@@ -82,6 +82,11 @@
         color: black; /* Set active link color */
         font-weight: bold;
     }
+    p {
+        
+        padding: 6px 12px;
+    }
+    
   
     </style>
     <div class="main">
@@ -96,8 +101,8 @@
         <div class="container-fluid">
             <form method="POST"  action="{% url 'customer_add' %} ">
                 {% csrf_token %}
-                {{ form }}
-                <button type="submit">Add Product</button>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Add Product</button>
               </form>
         </div>
     </main>
