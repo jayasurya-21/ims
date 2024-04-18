@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Invoice</h1>
+<p>Invoice Number: {{ sale.invoice_number }}</p>
+<p>Customer: {{ sale.customer }}</p>
+<p>Date: {{ sale.sale_date }}</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Sale Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale_product in sale_products %}
+        <tr>
+            <td>{{ sale_product.product }}</td>
+            <td>{{ sale_product.quantity }}</td>
+            <td>{{ sale_product.sale_price }}</td>
+            <td>{{ sale_product.quantity * sale_product.sale_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Total Amount: {{ total_amount }}</p>
+{% endblock %}
